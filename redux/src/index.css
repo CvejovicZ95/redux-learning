@@ -1,13 +1,128 @@
+/* Prethodni CSS */
+
 body {
+  background-color: #f0f0f0; /* svetlija pozadina */
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  text-align: center;
+}
+
+section {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  margin: 20px; /* dodaj malo margine oko sekcija */
+}
+
+h2 {
+  margin-bottom: 20px; /* razmak između naslova i forme */
+  color: #333; /* tamnija boja teksta */
+}
+
+h3 {
+  margin-bottom: 15px; /* razmak između naslova i postova */
+  color: #007bff; /* plava boja za naslove postova */
+}
+
+article {
+  border-bottom: 1px solid #e0e0e0; /* razdvajanje između postova */
+  padding: 10px 0; /* razmak oko svakog posta */
+}
+
+article:last-child {
+  border-bottom: none; /* ukloni donju ivicu poslednjeg posta */
+}
+
+p {
+  font-size: 1rem; /* smanji veličinu fonta za postove */
+  color: #555; /* tamnija boja teksta za sadržaj */
+  margin: 5px 0; /* razmak između stavki */
+}
+
+.postCredit {
+  font-size: 0.9rem; /* manji font za informacije o autoru i vremenu */
+  color: #888; /* svetlija boja za kredite */
+}
+
+/* Stilovi za dugmad reakcija */
+.reactionButton {
+  font-size: 1rem; /* veća veličina fonta za reakcije */
+  margin: 0 5px; /* razmak između dugmadi */
+  padding: 5px 10px; /* padding unutar dugmadi */
+  border: none; /* bez ivica */
+  border-radius: 5px; /* zaobljeni uglovi */
+  background-color: rgb(252, 83, 83); /* svetla pozadina za dugmad */
+  cursor: pointer; /* promeni kursor na ruku */
+  transition: background-color 0.3s ease; /* glatka promena pozadine */
+}
+
+.reactionButton:hover {
+  background-color: rgb(255, 61, 61); /* tamnija boja kada se pređe mišem */
+}
+
+.reactionButton:active {
+  background-color: red; /* još tamnija boja kada je dugme pritisnuto */
+}
+
+button {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  margin: 10px 0; /* margin samo gore i dole */
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* blaga senka za dugmad */
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004085;
+}
+
+input[type="text"],
+textarea {
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px 0; /* razmak samo gore i dole */
+  width: 100%;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease; /* glatka promena boje ivice */
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+textarea {
+  resize: none; /* onemogući promenljivost veličine textarea */
+  height: 100px; /* fiksna visina textarea */
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+  color: #999; /* boja placeholder teksta */
+}
+
+div {
+  margin-top: 10px;
 }
