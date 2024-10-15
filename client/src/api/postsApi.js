@@ -13,7 +13,7 @@ export const getPosts = async () => {
     }
 }
 
-export const createPost = async (title, content) => {
+export const createPost = async (title, content, userId) => {
     try {
         const response = await fetch(`${apiUrl}/api/posts`, {
             method: "POST",
@@ -23,6 +23,7 @@ export const createPost = async (title, content) => {
             body: JSON.stringify({
                 title,
                 content,
+                userId
             }),
         })
 
@@ -36,3 +37,24 @@ export const createPost = async (title, content) => {
         throw error;
     }
 }
+
+export const updateReactionsOnPost = async (id, emoji) => {
+    try {
+        const response = await fetch(`${apiUrl}/api/posts/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ emoji }),  
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || "Failed to update reactions");
+        }
+        return data;
+    } catch (error) {
+        console.error("Error updating reactions:", error);
+        throw error;
+    }
+};
