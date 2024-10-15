@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, selectAllPosts } from './postsSlice';
+import { PostAuthor } from './PostAuthor';
 
 export const PostsList = () => {
     const dispatch = useDispatch();
@@ -11,9 +12,10 @@ export const PostsList = () => {
     }, [dispatch]);
 
     const renderedPosts = posts.map((post) => (
-        <article key={post.id}>
+        <article key={post._id}>
             <h2>{post.title}</h2>
             <p>{post.content}</p>
+            <PostAuthor userId={post.userId}/>
         </article>
     ));
 

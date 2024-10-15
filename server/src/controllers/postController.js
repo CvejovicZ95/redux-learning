@@ -11,8 +11,8 @@ export const getAllPostsController = async (req, res) => {
 
 export const addPostController = async (req, res) => {
     try {
-        const { title, content} = req.body
-        const newPost = await addPost(title, content)
+        const { title, content, userId} = req.body
+        const newPost = await addPost(title, content, userId)
 
         res.status(201).json(newPost)
     } catch (error) {

@@ -11,7 +11,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 
 // Thunk za dodavanje posta
 export const addNewPost = createAsyncThunk('posts/addNewPost', async (newPost) => {
-    const response = await createPost(newPost.title, newPost.content);
+    const response = await createPost(newPost.title, newPost.content, newPost.userId);
     return response;
 });
 

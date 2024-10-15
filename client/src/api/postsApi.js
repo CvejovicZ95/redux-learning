@@ -13,7 +13,7 @@ export const getPosts = async () => {
     }
 }
 
-export const createPost = async (title, content) => {
+export const createPost = async (title, content, userId) => {
     try {
         const response = await fetch(`${apiUrl}/api/posts`, {
             method: "POST",
@@ -23,6 +23,7 @@ export const createPost = async (title, content) => {
             body: JSON.stringify({
                 title,
                 content,
+                userId
             }),
         })
 
