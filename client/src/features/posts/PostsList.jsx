@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, selectAllPosts } from './postsSlice';
 import { PostAuthor } from './PostAuthor';
-import { TimeAgo } from "./TimeAgo"
+import { TimeAgo } from "./TimeAgo";
+import { ReactionButtons } from './ReactionButtons';
 
 export const PostsList = () => {
     const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export const PostsList = () => {
             <p>{post.content}</p>
             <PostAuthor userId={post.userId}/>
             <TimeAgo timestamp={post.created_at}/>
+            <ReactionButtons post={post} />
         </article>
     ));
 

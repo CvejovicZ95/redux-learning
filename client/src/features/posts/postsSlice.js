@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getPosts, createPost } from '../../api/postsApi';
+import { getPosts, createPost, updateReactionsOnPost } from '../../api/postsApi';
 
 const initialState = [];
 
@@ -15,6 +15,11 @@ export const addNewPost = createAsyncThunk('posts/addNewPost', async (newPost) =
     return response;
 });
 
+export const updateReaction = createAsyncThunk('post/updateReaction', async ({ postId, emoji}) => {
+    const response = await updateReactionsOnPost(postId, emoji);
+    return response
+})
+
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -26,7 +31,14 @@ const postsSlice = createSlice({
             })
             .addCase(addNewPost.fulfilled, (state, action) => {
                 state.push(action.payload); // Dodaje novi post u stanje
-            });
+            })
+            .addCase(updateReaction.fulfilled, (state, action) => {
+                const updatedPost = action.payload;
+                const existingPost = state.find(post => post._id === updatedPost._id)
+                if (existingPost) {
+                    existingPost.reactions = updatedPost.reactions
+                }
+            })
     }
 });
 

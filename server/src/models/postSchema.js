@@ -13,6 +13,13 @@ const postsSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  reactions: {
+    thumbsUp: { type: Number, default: 0 },
+    love: { type: Number, default: 0 },
+    laugh: { type: Number, default: 0 },
+    surprised: { type: Number, default: 0 },
+    sad: { type: Number, default: 0 },
   }
 }, {
   timestamps: {

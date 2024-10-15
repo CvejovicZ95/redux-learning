@@ -22,3 +22,20 @@ export const addPost = async (title, content, userId) => {
         throw new Error('Error adding post')
     }
 }
+
+export const updatePostReactions = async (postId, reactionType) => {
+    try {
+        const post = await Post.findById(postId);
+        
+        if (!post) {
+            throw new Error('Post not found');
+        }
+
+        post.reactions[reactionType] += 1;
+
+        await post.save();
+        return post;
+    } catch (error) {
+        throw new Error('Error updating reactions');
+    }
+};
