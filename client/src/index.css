@@ -100,3 +100,8 @@ h2 {
 p {
     margin: 5px 0;
 }
+
+i{
+    font-size: 0.8rem;
+    display: block;
+}
