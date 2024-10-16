@@ -1,39 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPost } from './postsSlice';
-import { selectAllUsers, fetchUsers } from "../users/usersSlice";
+import { selectAllUsers, fetchUsers, getUsersStatus, getUsersError } from "../users/usersSlice";
 
 export const AddPostForm = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [userId, setUserId] = useState('');
+    const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
     const dispatch = useDispatch();
-
     const users = useSelector(selectAllUsers);
+    const usersStatus = useSelector(getUsersStatus);
+    const error = useSelector(getUsersError);
 
     useEffect(() => {
-        dispatch(fetchUsers())
-    }, [dispatch]);
+        if (usersStatus === 'idle') {
+            dispatch(fetchUsers());
+        }
+    }, [usersStatus, dispatch]);
 
-    
+    const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
 
     const onSavePostClicked = () => {
-        if (title && content) {
-            dispatch(addNewPost({ title, content, userId }));
-            setTitle('');
-            setContent('');
-            setUserId('')
+        if (canSave) {
+            try {
+                setAddRequestStatus('pending')
+                dispatch(addNewPost({ title, content, userId})).unwrap()
+
+                setTitle('');
+                setContent('');
+                setUserId('');
+            } catch (error) {
+                console.error('Failed to save the post', error)
+            } finally {
+                setAddRequestStatus('idle')
+            }
         }
     };
 
-    const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
-
-    const usersOptions = users.map((user) => (
+    let usersOptions = users.map((user) => (
         <option key={user._id} value={user._id}>
             {user.username}
         </option>
     ))
+
+    if (usersStatus === 'loading') {
+        return <p>Loading users...</p>;
+    }
+
+    if (usersStatus === 'failed') {
+        return <p>{error}</p>;
+    }
+
+    if (users.length === 0) {
+        usersOptions = <option value="">No users available</option>;
+    }
 
     return (
         <form>
