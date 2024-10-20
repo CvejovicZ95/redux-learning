@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getPosts, createPost, updateReactionsOnPost } from '../../api/postsApi';
+import { getPosts, createPost, updateReactionsOnPost, updateWholePost, deletePost } from '../../api/postsApi';
 
 const initialState = {
     posts:[],
@@ -34,6 +34,24 @@ export const updateReaction = createAsyncThunk('posts/updateReaction', async ({ 
     }
 });
 
+export const updatePost = createAsyncThunk('posts/updatePost', async ({ id, title, content, reactions, userId }, { rejectWithValue }) => {
+    try {
+        const response = await updateWholePost(id, title, content, reactions, userId);
+        return response;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+export const deleteSignlePost = createAsyncThunk('posts/deletePost' , async({ id }, { rejectWithValue }) => {
+    try {
+        const response = await deletePost(id);
+        return response;
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -66,6 +84,20 @@ const postsSlice = createSlice({
             })
             .addCase(updateReaction.rejected, (state, action) => {
                 state.error = action.payload
+            })
+            .addCase(updatePost.fulfilled, (state, action) => {
+                const updatedPost = action.payload;
+                const existingPost = state.posts.find(post => post._id === updatedPost._id);
+                if (existingPost) {
+                    existingPost.title = updatedPost.title;
+                    existingPost.content = updatedPost.content;
+                    existingPost.reactions = updatedPost.reactions;
+                    existingPost.userId = updatedPost.userId;
+                }
+            })
+            .addCase(deleteSignlePost.fulfilled, (state, action) => {
+                const idToDelete = action.meta.arg.id; 
+                state.posts = state.posts.filter(post => post._id !== idToDelete);
             })
     }
 });

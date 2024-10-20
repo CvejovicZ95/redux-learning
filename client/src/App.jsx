@@ -2,7 +2,7 @@
 import { PostsList } from "./features/posts/PostsList";
 import { AddPostForm } from "./features/posts/AddPostForm";
 import { SinglePostPage } from "./features/posts/SinglePostPage";
-//import { EditPostForm } from "./features/posts/EditPostForm";
+import { EditPostForm } from "./features/posts/EditPostForm";
 import { Layout } from "./components/Layout";
 import { Routes, Route } from "react-router-dom"
 
@@ -17,7 +17,7 @@ function App() {
 
       <Route path="post/:postId" element={<SinglePostPage />} />
 
-      {/*<Route path="post/edit/:postId" element={<EditPostForm/>}/>*/}
+      <Route path="post/edit/:postId" element={<EditPostForm/>}/>
       
     </Route>
   </Routes>
