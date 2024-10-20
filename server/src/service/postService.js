@@ -39,3 +39,27 @@ export const updatePostReactions = async (postId, reactionType) => {
         throw new Error('Error updating reactions');
     }
 };
+
+export const updateWholePost = async (postId, newData) => {
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(postId, newData, {new:true})
+        if (!updatedPost) {
+            throw new Error('Post not found')
+        }
+        return updatedPost
+    } catch (error) {
+        throw new Error('Error updating post')
+    }
+}
+
+export const deletePost = async (postId) => {
+    try {
+        const deletedPost = await Post.findByIdAndDelete(postId)
+        if (!deletedPost) {
+            throw new Error('Post not found')
+        }
+        return 'Post deleted successfully'
+    } catch (error) {
+        throw new Error('Error deleting post')
+    }
+}

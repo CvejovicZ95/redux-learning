@@ -10,6 +10,35 @@ body {
     align-items: center;
 }
 
+header {
+    background-color: #4CAF50; /* Zeleni pozadina */
+    color: white; /* Bele boje za tekst */
+    padding: 10px 20px; /* Razmak unutar header-a */
+    display: flex; /* Flexbox za raspored */
+    justify-content: space-between; /* Razmak između elemenata */
+    align-items: center; /* Vertikalno centriranje */
+}
+
+nav ul {
+    list-style: none; /* Ukloni tačkice */
+    padding: 0; /* Ukloni padding */
+    display: flex; /* Rasporedi linkove horizontalno */
+}
+
+nav li {
+    margin-left: 20px; /* Razmak između linkova */
+}
+
+nav a {
+    color: white; /* Bele boje za linkove */
+    text-decoration: none; /* Ukloni podvlačenje */
+    transition: color 0.3s; /* Efekat prelaza na hover */
+}
+
+nav a:hover {
+    color: #ddd; /* Svetlija boja na hover */
+}
+
 /* Container for components */
 div {
     background-color: white;

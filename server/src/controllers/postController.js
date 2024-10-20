@@ -1,4 +1,4 @@
-import { getAllPosts, addPost, updatePostReactions } from "../service/postService.js";
+import { getAllPosts, addPost, updatePostReactions, updateWholePost, deletePost } from "../service/postService.js";
 
 export const getAllPostsController = async (req, res) => {
     try {
@@ -32,3 +32,24 @@ export const updatePostReactionsController = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+export const updateWholePostController = async (req, res) => {
+    try {
+        const postId = req.params.id
+        const newData = req.body
+        const updatedPost = await updateWholePost(postId, newData)
+        res.status(200).json(updatedPost)
+    } catch (error) {
+        res.status(500).json({ error: 'Server error'})
+    }
+}
+
+export const deletePostController = async (req, res) => {
+    try {
+        const postId = req.params.id
+        await deletePost(postId)
+        res.status(200).json({ message: 'Post deleted successfully'})
+    } catch (error) {
+        res.status(500).json({ error: 'Server error'})
+    }
+}
