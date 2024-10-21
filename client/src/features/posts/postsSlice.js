@@ -1,11 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from '@reduxjs/toolkit';
 import { getPosts, createPost, updateReactionsOnPost, updateWholePost, deletePost } from '../../api/postsApi';
 
-const initialState = {
-    posts:[],
+const postsAdapter = createEntityAdapter({
+    selectId: (post) => post._id,
+    sortComparer: (a, b) => new Date(b.created_at) - new Date(a.created_at)
+});
+
+const initialState = postsAdapter.getInitialState({
     status: 'idle', // 'idle', | 'loading' | 'succeeded', | 'error' 
-    error: null
-};
+    error: null,
+    count:0
+});
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (_, { rejectWithValue }) => {
     try {
@@ -55,22 +60,26 @@ export const deleteSignlePost = createAsyncThunk('posts/deletePost' , async({ id
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
-    reducers: {},
+    reducers: {
+        increaseCount(state, action) {
+            state.count = state.count + 1
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.posts = action.payload; 
+                postsAdapter.setAll(state, action.payload)
             })
             .addCase(addNewPost.fulfilled, (state, action) => {
-                state.posts.push(action.payload);
+                postsAdapter.addOne(state, action.payload)
             })
             .addCase(updateReaction.fulfilled, (state, action) => {
                 const updatedPost = action.payload;
-                const existingPost = state.posts.find(post => post._id === updatedPost._id)
-                if (existingPost) {
-                    existingPost.reactions = updatedPost.reactions
-                }
+                postsAdapter.updateOne(state, {
+                    id:updatedPost._id,
+                    changes: {reactions: updatedPost.reactions}
+                })
             })
             .addCase(fetchPosts.pending, (state) => {
                 state.status = 'loading'
@@ -87,26 +96,38 @@ const postsSlice = createSlice({
             })
             .addCase(updatePost.fulfilled, (state, action) => {
                 const updatedPost = action.payload;
-                const existingPost = state.posts.find(post => post._id === updatedPost._id);
-                if (existingPost) {
-                    existingPost.title = updatedPost.title;
-                    existingPost.content = updatedPost.content;
-                    existingPost.reactions = updatedPost.reactions;
-                    existingPost.userId = updatedPost.userId;
-                }
+                postsAdapter.updateOne(state , {
+                    id:updatedPost._id,
+                    changes: {
+                        title: updatedPost.title,
+                        content: updatedPost.content,
+                        reactions: updatedPost.reactions,
+                        userId: updatedPost.userId
+                    }
+                })
             })
             .addCase(deleteSignlePost.fulfilled, (state, action) => {
-                const idToDelete = action.meta.arg.id; 
-                state.posts = state.posts.filter(post => post._id !== idToDelete);
+                const postToDelete = action.meta.arg.id; 
+                postsAdapter.removeOne(state, postToDelete)
             })
     }
 });
 
-export const selectAllPosts = (state) => state.posts.posts;
+export const {
+    selectAll: selectAllPosts,
+    selectById: selectPostById,
+    selectIds: selectPostIds
+} = postsAdapter.getSelectors(state => state.posts)
+
 export const getPostsStatus = (state) => state.posts.status
 export const getPostsError = (state) => state.posts.error
+export const getCount = (state) => state.posts.count
 
-export const selectPostById = (state, postId) => 
-    state.posts.posts.find(post => post._id === postId) 
+export const selectPostsByUser = createSelector(
+    [selectAllPosts, (state, userId) => userId],
+    (posts, userId) => posts.filter(post => post.userId._id === userId)
+)
+
+export const { increaseCount } = postsSlice.actions
 
 export default postsSlice.reducer;
